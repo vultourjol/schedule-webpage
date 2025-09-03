@@ -5,94 +5,168 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(145deg, #0a0e1a 0%, #1a1f3a 35%, #2d1b42 70%, #1e1e2e 100%);
     min-height: 100vh;
     color: #000000;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 24px;
 }
 
 header {
-    background: rgba(30, 30, 50, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 20px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 24px;
     text-align: center;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(139, 92, 246, 0.8) 20%, 
+        rgba(59, 130, 246, 0.8) 50%, 
+        rgba(16, 185, 129, 0.8) 80%, 
+        transparent
+    );
+    border-radius: 24px 24px 0 0;
 }
 
 header h1 {
-    color: #ffffff;
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #f8fafc;
+    font-size: 3.5rem;
+    margin-bottom: 12px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.02em;
 }
 
 .current-date {
-    font-size: 1.2em;
-    color: #a0a0a0;
+    font-size: 1.3em;
+    color: #94a3b8;
     font-weight: 500;
+    opacity: 0.9;
 }
 
 .header-controls {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 32px;
+    right: 32px;
 }
 
 .admin-btn {
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     color: white;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 12px 20px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9em;
-    transition: all 0.3s ease;
+    font-size: 0.95em;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid rgba(255, 255, 255, 0.2);
     display: inline-block;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
 }
 
 .admin-btn:hover {
-    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(74, 85, 104, 0.4);
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4);
+}
+
+.admin-btn:hover::before {
+    left: 100%;
 }
 
 main {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 24px;
 }
 
 section {
-    background: rgba(30, 30, 50, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 
+        0 16px 32px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 section h2 {
-    color: #ffffff;
-    margin-bottom: 20px;
-    font-size: 1.8em;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #f8fafc;
+    margin-bottom: 24px;
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.01em;
 }
 
 .schedule-table-container {
     overflow-x: auto;
+    border-radius: 16px;
 }
 
 .schedule-list-container {
@@ -102,175 +176,214 @@ section h2 {
 .schedule-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
 }
 
 .schedule-item {
-    background: rgba(45, 55, 72, 0.8);
-    border-radius: 10px;
-    padding: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.7) 100%);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.schedule-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #6366f1, #8b5cf6, #ec4899);
 }
 
 .schedule-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(99, 102, 241, 0.3);
 }
 
 .schedule-item-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
 }
 
 .schedule-time {
     font-size: 1.1em;
-    font-weight: 600;
-    color: #81c784;
-    background: rgba(129, 199, 132, 0.2);
-    padding: 5px 10px;
-    border-radius: 15px;
-    border: 1px solid rgba(129, 199, 132, 0.3);
+    font-weight: 700;
+    color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.1) 100%);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .schedule-type {
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.85em;
-    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
     text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .schedule-subject {
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 8px;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 10px;
+    line-height: 1.3;
 }
 
 .schedule-details {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
 }
 
 .schedule-teacher {
-    color: #b0b0b0;
-    font-size: 0.95em;
+    color: #cbd5e1;
+    font-size: 1em;
+    font-weight: 500;
 }
 
 .schedule-room {
-    color: #ff8a65;
-    font-weight: 500;
-    font-size: 0.95em;
+    color: #fbbf24;
+    font-weight: 600;
+    font-size: 1em;
 }
 
 .schedule-teacher::before {
     content: "👨‍🏫 ";
-    margin-right: 5px;
+    margin-right: 8px;
 }
 
 .schedule-room::before {
     content: "🏛️ ";
-    margin-right: 5px;
+    margin-right: 8px;
 }
 
 .no-lessons-message {
     text-align: center;
-    padding: 40px 20px;
-    color: #a0a0a0;
+    padding: 48px 24px;
+    color: #94a3b8;
     font-style: italic;
-    font-size: 1.1em;
-    background: rgba(45, 55, 72, 0.5);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.2em;
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.6) 0%, rgba(71, 85, 105, 0.4) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
-    border-radius: 10px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    background: rgba(30, 41, 59, 0.8);
 }
 
 .schedule-table th {
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
-    color: white;
-    padding: 15px 10px;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: #f8fafc;
+    padding: 18px 16px;
     text-align: left;
-    font-weight: 600;
-    font-size: 0.95em;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 700;
+    font-size: 1em;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    position: relative;
+}
+
+.schedule-table th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
 }
 
 .schedule-table td {
-    padding: 12px 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: background-color 0.3s ease;
-    background-color: rgba(45, 55, 72, 0.5);
+    padding: 16px;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    transition: all 0.3s ease;
+    background-color: rgba(51, 65, 85, 0.6);
 }
 
 .schedule-table tbody tr:hover {
-    background-color: rgba(74, 85, 104, 0.6);
+    background-color: rgba(71, 85, 105, 0.8);
+    transform: scale(1.01);
 }
 
 .schedule-table tbody tr:nth-child(even) {
-    background-color: rgba(45, 55, 72, 0.7);
+    background-color: rgba(51, 65, 85, 0.8);
 }
 
 .time-cell {
-    font-weight: 600;
-    color: #81c784;
-    min-width: 100px;
+    font-weight: 700;
+    color: #10b981;
+    min-width: 120px;
+    font-size: 1.05em;
 }
 
 .subject-cell {
-    font-weight: 600;
-    color: #ffffff;
+    font-weight: 700;
+    color: #f8fafc;
+    font-size: 1.05em;
 }
 
 .teacher-cell {
-    color: #b0b0b0;
+    color: #cbd5e1;
+    font-weight: 500;
 }
 
 .room-cell {
-    color: #ff8a65;
-    font-weight: 500;
+    color: #fbbf24;
+    font-weight: 600;
 }
 
 .type-cell {
-    padding: 5px 10px;
+    padding: 6px 14px;
     border-radius: 20px;
-    font-size: 0.85em;
-    font-weight: 500;
+    font-size: 0.9em;
+    font-weight: 600;
     text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .lecture {
-    background-color: #42a5f5;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     color: white;
+    border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .seminar {
-    background-color: #66bb6a;
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
     color: white;
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .lab {
-    background-color: #ffa726;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
     color: white;
+    border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .practice {
-    background-color: #ab47bc;
+    background: linear-gradient(135deg, #a855f7 0%, #7c2d12 100%);
     color: white;
+    border: 1px solid rgba(168, 85, 247, 0.3);
 }
 
 .calendar-container {
@@ -281,134 +394,149 @@ section h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding: 0 10px;
+    margin-bottom: 24px;
+    padding: 0 12px;
 }
 
 .calendar-header h3 {
-    color: #ffffff;
-    font-size: 1.5em;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: #f8fafc;
+    font-size: 1.8em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .nav-btn {
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     border: none;
     color: white;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: bold;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
 }
 
 .nav-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 15px rgba(74, 85, 104, 0.4);
-    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%);
+    transform: scale(1.15);
+    box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4);
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 1px;
-    background-color: #2d3748;
-    border-radius: 10px;
+    gap: 2px;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    padding: 2px;
 }
 
 .calendar-day {
-    background-color: rgba(45, 55, 72, 0.8);
-    color: #e8e8e8;
-    padding: 15px 5px;
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.7) 100%);
+    color: #e1e7f3;
+    padding: 16px 8px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    min-height: 50px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 .calendar-day:hover {
-    background-color: rgba(74, 85, 104, 0.8);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.6) 100%);
     transform: scale(1.05);
     color: #ffffff;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
 }
 
 .calendar-day.header {
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
-    color: white;
-    font-weight: 600;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: #f8fafc;
+    font-weight: 700;
     cursor: default;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    font-size: 0.95em;
+    letter-spacing: 0.5px;
 }
 
 .calendar-day.header:hover {
     transform: none;
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    box-shadow: none;
 }
 
 .calendar-day.other-month {
-    color: #4a5568;
-    background-color: rgba(26, 32, 44, 0.5);
+    color: #64748b;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(51, 65, 85, 0.3) 100%);
+    opacity: 0.6;
 }
 
 .calendar-day.today {
-    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     color: white;
-    font-weight: bold;
-    box-shadow: 0 0 20px rgba(229, 62, 62, 0.5);
+    font-weight: 800;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .calendar-day.has-classes {
-    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
-    box-shadow: 0 0 15px rgba(56, 161, 105, 0.3);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .calendar-day.has-classes::after {
     content: '';
     position: absolute;
-    bottom: 3px;
+    bottom: 4px;
     left: 50%;
     transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    background-color: white;
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(45deg, #ffffff, #f0f9ff);
     border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 10px;
+        padding: 16px;
     }
     
     header {
-        padding: 15px;
+        padding: 24px;
         position: relative;
     }
     
     .header-controls {
         position: static;
-        margin-top: 15px;
+        margin-top: 20px;
     }
     
     .admin-btn {
-        font-size: 0.8em;
-        padding: 8px 12px;
+        font-size: 0.9em;
+        padding: 10px 16px;
     }
     
     header h1 {
-        font-size: 2em;
+        font-size: 2.5rem;
     }
     
     .schedule-table-container {
@@ -420,22 +548,23 @@ section h2 {
     }
     
     .calendar-day {
-        padding: 10px 2px;
+        padding: 12px 4px;
         font-size: 0.9em;
+        min-height: 50px;
     }
     
     section {
-        padding: 15px;
+        padding: 20px;
     }
 }
 
 @media (max-width: 480px) {
     header h1 {
-        font-size: 1.5em;
+        font-size: 2rem;
     }
     
     .current-date {
-        font-size: 1em;
+        font-size: 1.1em;
     }
     
     .schedule-table-container {
@@ -447,13 +576,13 @@ section h2 {
     }
     
     .schedule-item {
-        padding: 12px;
+        padding: 16px;
     }
     
     .schedule-item-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: 10px;
     }
     
     .schedule-time {
@@ -461,12 +590,18 @@ section h2 {
     }
     
     .schedule-subject {
-        font-size: 1.1em;
+        font-size: 1.2em;
     }
     
     .calendar-day {
-        padding: 8px 1px;
-        font-size: 0.8em;
-        min-height: 40px;
+        padding: 10px 2px;
+        font-size: 0.85em;
+        min-height: 45px;
+    }
+    
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1em;
     }
 }
