@@ -1,10 +1,20 @@
 function loadScheduleData() {
-    const newFormatData = JSON.parse(localStorage.getItem('universitySchedule'));
-    if (newFormatData && Object.keys(newFormatData).length > 0) {
-        return newFormatData;
-    }
+    // Объединяем все месяцы в один объект
+    let allScheduleData = {};
     
-    return {};
+    // Добавляем данные из каждого месяца, если они существуют
+    if (typeof september2025 !== 'undefined') {
+        allScheduleData = { ...allScheduleData, ...september2025 };
+    }
+    if (typeof october2025 !== 'undefined') {
+        allScheduleData = { ...allScheduleData, ...october2025 };
+    }
+    // Добавляйте новые месяцы здесь по мере их создания
+    // if (typeof november2025 !== 'undefined') {
+    //     allScheduleData = { ...allScheduleData, ...november2025 };
+    // }
+    
+    return allScheduleData;
 }
 
 function getScheduleForDate(date) {
