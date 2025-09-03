@@ -1,0 +1,586 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e8e8e8;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background: rgba(30, 30, 50, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+header h1 {
+    color: #ffffff;
+    font-size: 2.2em;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.header-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.view-schedule-btn, .save-btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.view-schedule-btn {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.view-schedule-btn:hover {
+    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%);
+    transform: translateY(-2px);
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    color: white;
+}
+
+.save-btn:hover {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    transform: translateY(-2px);
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+}
+
+.calendar-section {
+    grid-column: 1 / -1;
+}
+
+.form-section {
+    grid-column: 1;
+}
+
+.lessons-list-section {
+    grid-column: 2;
+}
+
+.templates-section {
+    grid-column: 1 / -1;
+}
+
+section {
+    background: rgba(30, 30, 50, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+section h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 1.6em;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.calendar-header h3 {
+    color: #ffffff;
+    font-size: 1.4em;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(74, 85, 104, 0.4);
+    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    background-color: #2d3748;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calendar-day {
+    background-color: rgba(45, 55, 72, 0.8);
+    color: #e8e8e8;
+    padding: 15px 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.calendar-day:hover {
+    background-color: rgba(74, 85, 104, 0.8);
+    transform: scale(1.05);
+    color: #ffffff;
+}
+
+.calendar-day.header {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    color: white;
+    font-weight: 600;
+    cursor: default;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.calendar-day.header:hover {
+    transform: none;
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
+
+.calendar-day.other-month {
+    color: #4a5568;
+    background-color: rgba(26, 32, 44, 0.5);
+}
+
+.calendar-day.today {
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(229, 62, 62, 0.5);
+}
+
+.calendar-day.selected {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(66, 153, 225, 0.5);
+}
+
+.calendar-day.has-lessons {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(56, 161, 105, 0.3);
+}
+
+.lesson-count {
+    font-size: 0.7em;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 2px 6px;
+    margin-top: 2px;
+}
+
+.selected-date-info {
+    background: rgba(66, 153, 225, 0.2);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #90cdf4;
+    text-align: center;
+    font-weight: 500;
+    border: 1px solid rgba(66, 153, 225, 0.3);
+}
+
+.lesson-form {
+    display: grid;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    color: #cbd5e0;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+.form-group input,
+.form-group select {
+    background: rgba(45, 55, 72, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e8e8e8;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    background: rgba(45, 55, 72, 1);
+}
+
+.form-group input::placeholder {
+    color: #a0aec0;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.add-btn, .cancel-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1em;
+}
+
+.add-btn {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    color: white;
+}
+
+.add-btn:hover {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    transform: translateY(-2px);
+}
+
+.cancel-btn {
+    background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+    transform: translateY(-2px);
+}
+
+.lessons-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.no-lessons {
+    text-align: center;
+    color: #a0aec0;
+    font-style: italic;
+    padding: 40px 20px;
+}
+
+.lesson-item {
+    background: rgba(45, 55, 72, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.lesson-item:hover {
+    background: rgba(74, 85, 104, 0.6);
+    transform: translateX(5px);
+}
+
+.lesson-time {
+    color: #81c784;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.lesson-subject {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+.lesson-details {
+    color: #cbd5e0;
+    font-size: 0.9em;
+}
+
+.lesson-type {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.lesson-type.lecture { background-color: #42a5f5; }
+.lesson-type.seminar { background-color: #66bb6a; }
+.lesson-type.lab { background-color: #ffa726; }
+.lesson-type.practice { background-color: #ab47bc; }
+
+.lesson-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.edit-btn, .delete-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.3s ease;
+}
+
+.edit-btn {
+    background: #4299e1;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: #3182ce;
+    transform: scale(1.1);
+}
+
+.delete-btn {
+    background: #e53e3e;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #c53030;
+    transform: scale(1.1);
+}
+
+/* Шаблоны */
+.templates-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.template-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.template-btn:not(.danger) {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.template-btn:not(.danger):hover {
+    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%);
+    transform: translateY(-2px);
+}
+
+.template-btn.danger {
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    color: white;
+}
+
+.template-btn.danger:hover {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+    transform: translateY(-2px);
+}
+
+.template-info {
+    color: #cbd5e0;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.template-info ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.template-info li {
+    margin-bottom: 5px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: rgba(30, 30, 50, 0.98);
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-content h3 {
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.modal-content p {
+    color: #cbd5e0;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.confirm-btn {
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.confirm-btn:hover {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1200px) {
+    main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+    }
+    
+    .form-section {
+        grid-column: 1;
+    }
+    
+    .lessons-list-section {
+        grid-column: 1;
+    }
+    
+    .templates-section {
+        grid-column: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .header-controls {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .calendar-day {
+        padding: 10px 2px;
+        font-size: 0.9em;
+        min-height: 50px;
+    }
+    
+    .templates-controls {
+        flex-direction: column;
+    }
+    
+    .template-btn {
+        width: 100%;
+    }
+    
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+    }
+}

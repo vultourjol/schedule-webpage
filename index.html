@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание занятий - Университет</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Расписание" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Расписание занятий</h1>
+            <div class="current-date" id="currentDate"></div>
+            <div class="header-controls">
+                <a href="admin.html" class="admin-btn">Редактировать расписание</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="schedule-section">
+                <h2>Расписание на сегодня</h2>
+                <div class="schedule-table-container">
+                    <table class="schedule-table" id="scheduleTable">
+                        <thead>
+                            <tr>
+                                <th>Время</th>
+                                <th>Предмет</th>
+                                <th>Преподаватель</th>
+                                <th>Аудитория</th>
+                                <th>Тип занятия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="schedule-list-container" id="scheduleListContainer">
+                    <div class="schedule-list" id="scheduleList">
+                    </div>
+                </div>
+            </section>
+
+            <section class="calendar-section">
+                <h2>Календарь на месяц</h2>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prevMonth" class="nav-btn">&lt;</button>
+                        <h3 id="currentMonth"></h3>
+                        <button id="nextMonth" class="nav-btn">&gt;</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

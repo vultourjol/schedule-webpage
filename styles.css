@@ -1,0 +1,472 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e8e8e8;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background: rgba(30, 30, 50, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+header h1 {
+    color: #ffffff;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.current-date {
+    font-size: 1.2em;
+    color: #a0a0a0;
+    font-weight: 500;
+}
+
+.header-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.admin-btn {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: inline-block;
+}
+
+.admin-btn:hover {
+    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(74, 85, 104, 0.4);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+section {
+    background: rgba(30, 30, 50, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+section h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.schedule-table-container {
+    overflow-x: auto;
+}
+
+.schedule-list-container {
+    display: none;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.schedule-item {
+    background: rgba(45, 55, 72, 0.8);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.schedule-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.schedule-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.schedule-time {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #81c784;
+    background: rgba(129, 199, 132, 0.2);
+    padding: 5px 10px;
+    border-radius: 15px;
+    border: 1px solid rgba(129, 199, 132, 0.3);
+}
+
+.schedule-type {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    font-weight: 500;
+    text-align: center;
+}
+
+.schedule-subject {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.schedule-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.schedule-teacher {
+    color: #b0b0b0;
+    font-size: 0.95em;
+}
+
+.schedule-room {
+    color: #ff8a65;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.schedule-teacher::before {
+    content: "👨‍🏫 ";
+    margin-right: 5px;
+}
+
+.schedule-room::before {
+    content: "🏛️ ";
+    margin-right: 5px;
+}
+
+.no-lessons-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #a0a0a0;
+    font-style: italic;
+    font-size: 1.1em;
+    background: rgba(45, 55, 72, 0.5);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-table th {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    color: white;
+    padding: 15px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+    background-color: rgba(45, 55, 72, 0.5);
+}
+
+.schedule-table tbody tr:hover {
+    background-color: rgba(74, 85, 104, 0.6);
+}
+
+.schedule-table tbody tr:nth-child(even) {
+    background-color: rgba(45, 55, 72, 0.7);
+}
+
+.time-cell {
+    font-weight: 600;
+    color: #81c784;
+    min-width: 100px;
+}
+
+.subject-cell {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.teacher-cell {
+    color: #b0b0b0;
+}
+
+.room-cell {
+    color: #ff8a65;
+    font-weight: 500;
+}
+
+.type-cell {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 500;
+    text-align: center;
+}
+
+.lecture {
+    background-color: #42a5f5;
+    color: white;
+}
+
+.seminar {
+    background-color: #66bb6a;
+    color: white;
+}
+
+.lab {
+    background-color: #ffa726;
+    color: white;
+}
+
+.practice {
+    background-color: #ab47bc;
+    color: white;
+}
+
+.calendar-container {
+    max-width: 100%;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.calendar-header h3 {
+    color: #ffffff;
+    font-size: 1.5em;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(74, 85, 104, 0.4);
+    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: #2d3748;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calendar-day {
+    background-color: rgba(45, 55, 72, 0.8);
+    color: #e8e8e8;
+    padding: 15px 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.calendar-day:hover {
+    background-color: rgba(74, 85, 104, 0.8);
+    transform: scale(1.05);
+    color: #ffffff;
+}
+
+.calendar-day.header {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    color: white;
+    font-weight: 600;
+    cursor: default;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.calendar-day.header:hover {
+    transform: none;
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
+
+.calendar-day.other-month {
+    color: #4a5568;
+    background-color: rgba(26, 32, 44, 0.5);
+}
+
+.calendar-day.today {
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(229, 62, 62, 0.5);
+}
+
+.calendar-day.has-classes {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(56, 161, 105, 0.3);
+}
+
+.calendar-day.has-classes::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        padding: 15px;
+        position: relative;
+    }
+    
+    .header-controls {
+        position: static;
+        margin-top: 15px;
+    }
+    
+    .admin-btn {
+        font-size: 0.8em;
+        padding: 8px 12px;
+    }
+    
+    header h1 {
+        font-size: 2em;
+    }
+    
+    .schedule-table-container {
+        display: none;
+    }
+    
+    .schedule-list-container {
+        display: block;
+    }
+    
+    .calendar-day {
+        padding: 10px 2px;
+        font-size: 0.9em;
+    }
+    
+    section {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+    
+    .current-date {
+        font-size: 1em;
+    }
+    
+    .schedule-table-container {
+        display: none;
+    }
+    
+    .schedule-list-container {
+        display: block;
+    }
+    
+    .schedule-item {
+        padding: 12px;
+    }
+    
+    .schedule-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .schedule-time {
+        font-size: 1em;
+    }
+    
+    .schedule-subject {
+        font-size: 1.1em;
+    }
+    
+    .calendar-day {
+        padding: 8px 1px;
+        font-size: 0.8em;
+        min-height: 40px;
+    }
+}
