@@ -1,8 +1,6 @@
 function loadScheduleData() {
-    // Объединяем все месяцы в один объект
     let allScheduleData = {};
     
-    // Добавляем данные из каждого месяца, если они существуют
     if (typeof september2025 !== 'undefined') {
         allScheduleData = { ...allScheduleData, ...september2025 };
     }
@@ -57,6 +55,27 @@ document.addEventListener('DOMContentLoaded', function() {
             currentYear++;
         }
         generateCalendar();
+    });
+    
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            generateCalendar();
+        }
+        else if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar();
+        }
     });
 });
 
