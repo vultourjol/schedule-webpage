@@ -80,28 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Обработчик для кнопки "Управление данными"
     document.getElementById('dataManagementBtn').addEventListener('click', function() {
-        openLectureModal('управлениеданными');
-    });
-
-    // Обработчик для закрытия модального окна
-    const modal = document.getElementById('lectureModal');
-    const closeBtn = document.querySelector('.close');
-    
-    closeBtn.addEventListener('click', function() {
-        modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    // Закрытие модального окна по нажатию Escape
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            modal.style.display = 'none';
-        }
+        window.open('lecture.html?lecture=управлениеданными', '_blank');
     });
 });
 
@@ -282,71 +261,4 @@ setInterval(() => {
         generateCalendar();
     }
 }, 60000);
-
-// Функция для открытия модального окна с лекцией
-async function openLectureModal(lectureName) {
-    const modal = document.getElementById('lectureModal');
-    const content = document.getElementById('lectureContent');
-    
-    try {
-        // Загружаем markdown файл
-        const response = await fetch(`lectures/${lectureName}.md`);
-        if (!response.ok) {
-            throw new Error('Файл не найден');
-        }
-        
-        const markdownText = await response.text();
-        
-        // Преобразуем markdown в HTML
-        const htmlContent = markdownToHtml(markdownText);
-        
-        // Отображаем содержимое в модальном окне
-        content.innerHTML = htmlContent;
-        modal.style.display = 'block';
-        
-    } catch (error) {
-        console.error('Ошибка загрузки лекции:', error);
-        content.innerHTML = '<h3>Ошибка</h3><p>Не удалось загрузить лекцию. Попробуйте позже.</p>';
-        modal.style.display = 'block';
-    }
-}
-
-// Простая функция для преобразования Markdown в HTML
-function markdownToHtml(markdown) {
-    let html = markdown;
-    
-    // Заголовки
-    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-    
-    // Жирный текст
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
-    // Списки
-    html = html.replace(/^\s*[\*\-] (.*$)/gim, '<li>$1</li>');
-    html = html.replace(/^\s*\d+\. (.*$)/gim, '<li>$1</li>');
-    
-    // Обертываем списки в ul
-    html = html.replace(/(<li>.*?<\/li>)/gims, function(match) {
-        // Проверяем, не обернут ли уже в список
-        if (!match.includes('<ul>') && !match.includes('<ol>')) {
-            return '<ul>' + match + '</ul>';
-        }
-        return match;
-    });
-    
-    // Параграфы - разделяем по двойным переносам строк
-    const paragraphs = html.split(/\n\s*\n/);
-    html = paragraphs.map(p => {
-        p = p.trim();
-        // Не оборачиваем в <p> если это уже заголовок или список
-        if (p.startsWith('<h') || p.startsWith('<ul>') || p.startsWith('<ol>') || p.includes('<li>')) {
-            return p;
-        }
-        return p ? `<p>${p}</p>` : '';
-    }).join('');
-    
-    return html;
-}
 
