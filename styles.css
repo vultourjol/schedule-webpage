@@ -882,7 +882,7 @@ footer a:hover::before {
     }
     
     .modal-close-btn {
-        order: -1;
+        order: 1;
         position: static;
         width: 40px;
         height: 40px;
@@ -891,7 +891,7 @@ footer a:hover::before {
     .modal-content {
         padding: 24px;
         border-radius: 16px;
-        max-height: 85vh;
+        max-height: 70vh;
     }
 }
 
@@ -904,7 +904,7 @@ footer a:hover::before {
     .modal-content {
         padding: 20px;
         border-radius: 12px;
-        max-height: 90vh;
+        max-height: 75vh;
     }
     
     .modal-close-btn {
