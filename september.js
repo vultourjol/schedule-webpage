@@ -11,7 +11,7 @@ const september2025 = {
             time: "12:30 - 15:20",
             subject: "Информационные технологии",
             teacher: "Батманова О.В.",
-            room: "-",
+            room: "607",
             type: "lecture"
         }
     ],

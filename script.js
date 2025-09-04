@@ -83,6 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
         openLectureModal('управлениеданными');
     });
 
+    // Обработчик для кнопки "Информационные технологии"
+    document.getElementById('itBtn').addEventListener('click', function() {
+        openLectureModal('информационныетехнологии');
+    });
+
     // Обработчик для закрытия модального окна
     const modal = document.getElementById('lectureModal');
     const closeBtn = document.querySelector('.close');
