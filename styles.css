@@ -88,43 +88,6 @@ header h1 {
     right: 32px;
 }
 
-.admin-btn {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95em;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: inline-block;
-    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-.admin-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.6s;
-}
-
-.admin-btn:hover {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4);
-}
-
-.admin-btn:hover::before {
-    left: 100%;
-}
-
 main {
     display: flex;
     flex-direction: column;
@@ -653,7 +616,7 @@ section h2 {
 
 .modal-wrapper {
     position: relative;
-    margin: 5% auto;
+    margin: 6% auto 5% auto;
     width: 90%;
     max-width: 900px;
     display: flex;
@@ -723,7 +686,7 @@ section h2 {
 }
 
 .close {
-    display: none; /* Скрываем старую кнопку */
+    display: none; 
 }
 
 #lectureContent {
@@ -759,7 +722,6 @@ section h2 {
     margin-bottom: 8px;
 }
 
-/* Стили для кнопок лекций */
 .calendar-section:last-of-type {
     text-align: center;
 }
@@ -768,7 +730,6 @@ section h2 {
     margin-bottom: 20px;
 }
 
-/* Контейнер для кнопок лекций */
 .lectures-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -802,7 +763,6 @@ section h2 {
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
 }
 
-/* Стили для футера */
 footer {
     background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(20px);
@@ -871,22 +831,24 @@ footer a:hover::before {
     width: 100%;
 }
 
-/* Адаптивные стили для модального окна */
-
 /* Стили для поиска в модальном окне */
 .modal-search-container {
-    position: sticky;
-    top: 0;
-    background: linear-gradient(145deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
-    padding: 20px 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.3);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-    border-radius: 12px;
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 900px;
+    background: transparent;
+    backdrop-filter: none;
+    border-radius: 16px;
+    padding: 20px;
+    z-index: 1001;
     display: flex;
     align-items: center;
     gap: 12px;
+    box-shadow: none;
+    border: none;
 }
 
 .modal-search-input {
@@ -990,7 +952,7 @@ footer a:hover::before {
         flex-direction: column;
         align-items: center;
         gap: 12px;
-        margin: 2% auto;
+        margin: 15% auto 2% auto;
         width: 95%;
     }
     
@@ -1008,32 +970,43 @@ footer a:hover::before {
     }
     
     .modal-search-container {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        padding: 16px 0;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        width: 95%;
+        top: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .modal-search-input {
+        flex: 1;
+        min-width: 200px;
     }
     
     .search-controls {
         justify-content: center;
+        gap: 6px;
+        flex-shrink: 0;
     }
     
     .search-counter {
-        min-width: 60px;
-        font-size: 13px;
+        min-width: 50px;
+        font-size: 12px;
+        text-align: center;
     }
 }
 
 @media (max-width: 480px) {
     .modal-wrapper {
-        margin: 1% auto;
+        margin: 20% auto 1% auto;
         width: 98%;
     }
     
     .modal-content {
         padding: 20px;
         border-radius: 12px;
-        max-height: 75vh;
+        max-height: 70vh;
     }
     
     .modal-close-btn {
@@ -1047,12 +1020,27 @@ footer a:hover::before {
     }
     
     .modal-search-container {
-        padding: 12px 0;
+        padding: 10px;
+        width: 98%;
+        top: 5px;
+        gap: 6px;
     }
     
     .modal-search-input {
         font-size: 14px;
-        padding: 10px 12px;
+        padding: 8px 12px;
+        min-width: 150px;
+        flex: 1;
+    }
+    
+    .search-controls {
+        gap: 4px;
+        flex-shrink: 0;
+    }
+    
+    .search-counter {
+        min-width: 40px;
+        font-size: 11px;
     }
     
     .search-nav-btn, .search-clear-btn {
@@ -1061,7 +1049,7 @@ footer a:hover::before {
     }
     
     .search-nav-btn svg, .search-clear-btn svg {
-        width: 14px;
-        height: 14px;
+        width: 12px;
+        height: 12px;
     }
 }
