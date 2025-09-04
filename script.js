@@ -88,9 +88,44 @@ document.addEventListener('DOMContentLoaded', function() {
         openLectureModal('информационныетехнологии');
     });
 
+    // Обработчик для кнопки "Вероятность и статистика"
+    document.getElementById('probabilityStatisticsBtn').addEventListener('click', function() {
+        openLectureModal('вероятностьистатистика');
+    });
+
+    // Обработчик для кнопки "Вычислительная математика"
+    document.getElementById('computationalMathBtn').addEventListener('click', function() {
+        openLectureModal('вычислительнаяматематика');
+    });
+
+    // Обработчик для кнопки "Дифференциальные уравнения"
+    document.getElementById('differentialEquationsBtn').addEventListener('click', function() {
+        openLectureModal('дифференциальныеуравнения');
+    });
+
+    // Обработчик для кнопки "Иностранный язык"
+    document.getElementById('foreignLanguageBtn').addEventListener('click', function() {
+        openLectureModal('иностранныйязык');
+    });
+
+    // Обработчик для кнопки "Теория информации"
+    document.getElementById('informationTheoryBtn').addEventListener('click', function() {
+        openLectureModal('теорияинформации');
+    });
+
+    // Обработчик для кнопки "Технологии программирования"
+    document.getElementById('programmingTechnologiesBtn').addEventListener('click', function() {
+        openLectureModal('технологиипрограммирования');
+    });
+
+    // Обработчик для кнопки "УИРИП"
+    document.getElementById('uiripBtn').addEventListener('click', function() {
+        openLectureModal('уирип');
+    });
+
     // Обработчик для закрытия модального окна
     const modal = document.getElementById('lectureModal');
-    const closeBtn = document.querySelector('.close');
+    const closeBtn = document.getElementById('modalCloseBtn');
     
     closeBtn.addEventListener('click', function() {
         modal.style.display = 'none';

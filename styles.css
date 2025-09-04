@@ -651,13 +651,20 @@ section h2 {
     backdrop-filter: blur(5px);
 }
 
-.modal-content {
-    background: linear-gradient(145deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
+.modal-wrapper {
+    position: relative;
     margin: 5% auto;
-    padding: 40px;
-    border-radius: 24px;
     width: 90%;
     max-width: 900px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.modal-content {
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
+    padding: 40px;
+    border-radius: 24px;
     max-height: 80vh;
     overflow-y: auto;
     box-shadow: 
@@ -666,25 +673,57 @@ section h2 {
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(139, 92, 246, 0.3);
     position: relative;
+    flex: 1;
+}
+
+.modal-close-btn {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #e2e8f0;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    position: sticky;
+    top: 20px;
+    flex-shrink: 0;
+}
+
+.modal-close-btn:hover {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+    border-color: rgba(139, 92, 246, 0.6);
+    transform: scale(1.05);
+    box-shadow: 
+        0 6px 20px rgba(139, 92, 246, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
+.modal-close-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+.modal-close-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.modal-close-btn:hover svg {
+    transform: rotate(90deg);
 }
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    z-index: 1001;
-}
-
-.close:hover,
-.close:focus {
-    color: #8b5cf6;
-    text-decoration: none;
+    display: none; /* Скрываем старую кнопку */
 }
 
 #lectureContent {
@@ -721,7 +760,25 @@ section h2 {
 }
 
 /* Стили для кнопок лекций */
-#dataManagementBtn, #itBtn {
+.calendar-section:last-of-type {
+    text-align: center;
+}
+
+.calendar-section:last-of-type h2 {
+    margin-bottom: 20px;
+}
+
+/* Контейнер для кнопок лекций */
+.lectures-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+#dataManagementBtn, #itBtn, #probabilityStatisticsBtn, #computationalMathBtn, 
+#differentialEquationsBtn, #foreignLanguageBtn, #informationTheoryBtn, 
+#programmingTechnologiesBtn, #uiripBtn {
     background: linear-gradient(145deg, rgba(139, 92, 246, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
     border: 1px solid rgba(139, 92, 246, 0.4);
     color: #e2e8f0;
@@ -731,11 +788,14 @@ section h2 {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin: 8px;
+    margin: 0;
     backdrop-filter: blur(10px);
+    width: 100%;
 }
 
-#dataManagementBtn:hover, #itBtn:hover {
+#dataManagementBtn:hover, #itBtn:hover, #probabilityStatisticsBtn:hover, 
+#computationalMathBtn:hover, #differentialEquationsBtn:hover, #foreignLanguageBtn:hover, 
+#informationTheoryBtn:hover, #programmingTechnologiesBtn:hover, #uiripBtn:hover {
     background: linear-gradient(145deg, rgba(139, 92, 246, 0.3) 0%, rgba(168, 85, 247, 0.2) 100%);
     border-color: rgba(139, 92, 246, 0.6);
     transform: translateY(-2px);
@@ -809,4 +869,51 @@ footer a:hover {
 
 footer a:hover::before {
     width: 100%;
+}
+
+/* Адаптивные стили для модального окна */
+@media (max-width: 768px) {
+    .modal-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin: 2% auto;
+        width: 95%;
+    }
+    
+    .modal-close-btn {
+        order: -1;
+        position: static;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .modal-content {
+        padding: 24px;
+        border-radius: 16px;
+        max-height: 85vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-wrapper {
+        margin: 1% auto;
+        width: 98%;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        border-radius: 12px;
+        max-height: 90vh;
+    }
+    
+    .modal-close-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .modal-close-btn svg {
+        width: 20px;
+        height: 20px;
+    }
 }

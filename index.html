@@ -60,8 +60,17 @@
 
             <section class="calendar-section">
                 <h2>Лекции</h2>
-                <button id="dataManagementBtn">Управление данными</button>
-                <button id="itBtn">Информационные технологии</button>
+                <div class="lectures-container">
+                    <button id="dataManagementBtn">Управление данными</button>
+                    <button id="itBtn">Информационные технологии</button>
+                    <button id="probabilityStatisticsBtn">Вероятность и статистика</button>
+                    <button id="computationalMathBtn">Вычислительная математика</button>
+                    <button id="differentialEquationsBtn">Дифференциальные уравнения</button>
+                    <button id="foreignLanguageBtn">Деловой иностранный язык</button>
+                    <button id="informationTheoryBtn">Теория информации</button>
+                    <button id="programmingTechnologiesBtn">Технологии программирования</button>
+                    <button id="uiripBtn">УИРИП</button>
+                </div>
             </section>
 
             <footer>
@@ -72,9 +81,15 @@
 
     <!-- Модальное окно для лекций -->
     <div id="lectureModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="lectureContent"></div>
+        <div class="modal-wrapper">
+            <div class="modal-content">
+                <div id="lectureContent"></div>
+            </div>
+            <button class="modal-close-btn" id="modalCloseBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
     </div>
 
