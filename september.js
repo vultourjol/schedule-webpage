@@ -4,7 +4,7 @@ const september2025 = {
             time: "09:00 - 11:50",
             subject: "Управление данными",
             teacher: "Жуков А.В.",
-            room: "-",
+            room: "618",
             type: "lecture"
         },
         {
