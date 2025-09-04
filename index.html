@@ -83,6 +83,27 @@
     <div id="lectureModal" class="modal">
         <div class="modal-wrapper">
             <div class="modal-content">
+                <div class="modal-search-container">
+                    <input type="text" id="modalSearchInput" placeholder="Поиск по содержимому лекции..." class="modal-search-input">
+                    <div class="search-controls">
+                        <span id="searchCounter" class="search-counter"></span>
+                        <button type="button" id="prevSearchBtn" class="search-nav-btn" title="Предыдущий результат">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button type="button" id="nextSearchBtn" class="search-nav-btn" title="Следующий результат">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button type="button" id="clearSearchBtn" class="search-clear-btn" title="Очистить поиск">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
                 <div id="lectureContent"></div>
             </div>
             <button class="modal-close-btn" id="modalCloseBtn">
@@ -90,6 +111,7 @@
                     <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
+            
         </div>
     </div>
 

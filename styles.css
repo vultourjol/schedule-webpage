@@ -872,6 +872,119 @@ footer a:hover::before {
 }
 
 /* Адаптивные стили для модального окна */
+
+/* Стили для поиска в модальном окне */
+.modal-search-container {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-search-input {
+    flex: 1;
+    background: linear-gradient(145deg, rgba(51, 65, 85, 0.8) 0%, rgba(71, 85, 105, 0.6) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: #e2e8f0;
+    font-size: 16px;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.modal-search-input::placeholder {
+    color: #94a3b8;
+    opacity: 0.8;
+}
+
+.modal-search-input:focus {
+    border-color: rgba(139, 92, 246, 0.6);
+    box-shadow: 
+        0 0 0 3px rgba(139, 92, 246, 0.2),
+        0 4px 12px rgba(139, 92, 246, 0.3);
+    background: linear-gradient(145deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.7) 100%);
+}
+
+.search-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-counter {
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 500;
+    min-width: 80px;
+    text-align: center;
+}
+
+.search-nav-btn, .search-clear-btn {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #e2e8f0;
+    backdrop-filter: blur(10px);
+}
+
+.search-nav-btn:hover, .search-clear-btn:hover {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+    border-color: rgba(139, 92, 246, 0.6);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.search-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.search-nav-btn:disabled:hover {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+/* Стили для выделения найденного текста */
+.search-highlight {
+    background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 100%);
+    color: #000000;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3);
+}
+
+.search-highlight.current {
+    background: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+    animation: pulse-highlight 1s ease-in-out;
+}
+
+@keyframes pulse-highlight {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
 @media (max-width: 768px) {
     .modal-wrapper {
         flex-direction: column;
@@ -892,6 +1005,22 @@ footer a:hover::before {
         padding: 24px;
         border-radius: 16px;
         max-height: 70vh;
+    }
+    
+    .modal-search-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 16px 0;
+    }
+    
+    .search-controls {
+        justify-content: center;
+    }
+    
+    .search-counter {
+        min-width: 60px;
+        font-size: 13px;
     }
 }
 
@@ -915,5 +1044,24 @@ footer a:hover::before {
     .modal-close-btn svg {
         width: 20px;
         height: 20px;
+    }
+    
+    .modal-search-container {
+        padding: 12px 0;
+    }
+    
+    .modal-search-input {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+    
+    .search-nav-btn, .search-clear-btn {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .search-nav-btn svg, .search-clear-btn svg {
+        width: 14px;
+        height: 14px;
     }
 }

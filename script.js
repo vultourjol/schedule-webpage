@@ -129,11 +129,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     closeBtn.addEventListener('click', function() {
         modal.style.display = 'none';
+        clearModalSearch();
     });
 
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
+            clearModalSearch();
         }
     });
 
@@ -141,8 +143,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             modal.style.display = 'none';
+            clearModalSearch();
         }
     });
+
+    // Инициализация поиска в модальном окне
+    initModalSearch();
 });
 
 function updateCurrentDate() {
@@ -328,6 +334,10 @@ async function openLectureModal(lectureName) {
     const modal = document.getElementById('lectureModal');
     const content = document.getElementById('lectureContent');
     
+    // Очищаем поиск при открытии нового модального окна
+    clearModalSearch();
+    document.getElementById('modalSearchInput').value = '';
+    
     try {
         // Загружаем markdown файл
         const response = await fetch(`lectures/${lectureName}.md`);
@@ -388,5 +398,215 @@ function markdownToHtml(markdown) {
     }).join('');
     
     return html;
+}
+
+// Переменные для поиска в модальном окне
+let modalSearchData = {
+    originalContent: '',
+    currentMatches: [],
+    currentIndex: -1,
+    isSearchActive: false
+};
+
+// Инициализация поиска в модальном окне
+function initModalSearch() {
+    const searchInput = document.getElementById('modalSearchInput');
+    const prevBtn = document.getElementById('prevSearchBtn');
+    const nextBtn = document.getElementById('nextSearchBtn');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    const counter = document.getElementById('searchCounter');
+
+    // Обработчик ввода в поле поиска
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        if (query.length > 0) {
+            performModalSearch(query);
+        } else {
+            clearModalSearch();
+        }
+    });
+
+    // Обработчик для Enter в поле поиска
+    searchInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            if (modalSearchData.currentMatches.length > 0) {
+                navigateToNextMatch();
+            }
+        }
+    });
+
+    // Навигация по результатам
+    prevBtn.addEventListener('click', navigateToPrevMatch);
+    nextBtn.addEventListener('click', navigateToNextMatch);
+
+    // Очистка поиска
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        clearModalSearch();
+        searchInput.focus();
+    });
+}
+
+// Выполнение поиска
+function performModalSearch(query) {
+    const content = document.getElementById('lectureContent');
+    
+    // Сохраняем оригинальный контент при первом поиске
+    if (!modalSearchData.isSearchActive) {
+        modalSearchData.originalContent = content.innerHTML;
+        modalSearchData.isSearchActive = true;
+    }
+
+    // Восстанавливаем оригинальный контент
+    content.innerHTML = modalSearchData.originalContent;
+
+    // Ищем совпадения (игнорируем регистр)
+    const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+    const walker = document.createTreeWalker(
+        content,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+    );
+
+    const textNodes = [];
+    let node;
+    while (node = walker.nextNode()) {
+        if (node.textContent.trim() && regex.test(node.textContent)) {
+            textNodes.push(node);
+        }
+    }
+
+    modalSearchData.currentMatches = [];
+    modalSearchData.currentIndex = -1;
+
+    // Выделяем найденный текст
+    textNodes.forEach(textNode => {
+        const parent = textNode.parentNode;
+        const text = textNode.textContent;
+        const highlightedHTML = text.replace(regex, (match, p1, offset) => {
+            modalSearchData.currentMatches.push({ element: null, offset: offset });
+            return `<span class="search-highlight">${match}</span>`;
+        });
+
+        if (highlightedHTML !== text) {
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = highlightedHTML;
+            
+            // Заменяем текстовый узел на выделенный контент
+            while (wrapper.firstChild) {
+                parent.insertBefore(wrapper.firstChild, textNode);
+            }
+            parent.removeChild(textNode);
+        }
+    });
+
+    // Обновляем ссылки на выделенные элементы
+    const highlights = content.querySelectorAll('.search-highlight');
+    modalSearchData.currentMatches = Array.from(highlights).map(el => ({ element: el }));
+
+    updateSearchUI();
+
+    // Переходим к первому результату
+    if (modalSearchData.currentMatches.length > 0) {
+        modalSearchData.currentIndex = 0;
+        highlightCurrentMatch();
+        scrollToCurrentMatch();
+    }
+}
+
+// Очистка поиска
+function clearModalSearch() {
+    const content = document.getElementById('lectureContent');
+    
+    if (modalSearchData.isSearchActive && modalSearchData.originalContent) {
+        content.innerHTML = modalSearchData.originalContent;
+    }
+
+    modalSearchData = {
+        originalContent: '',
+        currentMatches: [],
+        currentIndex: -1,
+        isSearchActive: false
+    };
+
+    updateSearchUI();
+}
+
+// Навигация к следующему результату
+function navigateToNextMatch() {
+    if (modalSearchData.currentMatches.length === 0) return;
+
+    // Убираем выделение с текущего
+    if (modalSearchData.currentIndex >= 0) {
+        const currentElement = modalSearchData.currentMatches[modalSearchData.currentIndex].element;
+        currentElement.classList.remove('current');
+    }
+
+    modalSearchData.currentIndex = (modalSearchData.currentIndex + 1) % modalSearchData.currentMatches.length;
+    highlightCurrentMatch();
+    scrollToCurrentMatch();
+    updateSearchUI();
+}
+
+// Навигация к предыдущему результату
+function navigateToPrevMatch() {
+    if (modalSearchData.currentMatches.length === 0) return;
+
+    // Убираем выделение с текущего
+    if (modalSearchData.currentIndex >= 0) {
+        const currentElement = modalSearchData.currentMatches[modalSearchData.currentIndex].element;
+        currentElement.classList.remove('current');
+    }
+
+    modalSearchData.currentIndex = modalSearchData.currentIndex <= 0 
+        ? modalSearchData.currentMatches.length - 1 
+        : modalSearchData.currentIndex - 1;
+    
+    highlightCurrentMatch();
+    scrollToCurrentMatch();
+    updateSearchUI();
+}
+
+// Выделение текущего совпадения
+function highlightCurrentMatch() {
+    if (modalSearchData.currentIndex >= 0 && modalSearchData.currentMatches.length > 0) {
+        const currentElement = modalSearchData.currentMatches[modalSearchData.currentIndex].element;
+        currentElement.classList.add('current');
+    }
+}
+
+// Прокрутка к текущему совпадению
+function scrollToCurrentMatch() {
+    if (modalSearchData.currentIndex >= 0 && modalSearchData.currentMatches.length > 0) {
+        const currentElement = modalSearchData.currentMatches[modalSearchData.currentIndex].element;
+        currentElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
+}
+
+// Обновление интерфейса поиска
+function updateSearchUI() {
+    const counter = document.getElementById('searchCounter');
+    const prevBtn = document.getElementById('prevSearchBtn');
+    const nextBtn = document.getElementById('nextSearchBtn');
+
+    if (modalSearchData.currentMatches.length > 0) {
+        counter.textContent = `${modalSearchData.currentIndex + 1} из ${modalSearchData.currentMatches.length}`;
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+    } else {
+        counter.textContent = modalSearchData.isSearchActive ? 'Не найдено' : '';
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+    }
+}
+
+// Экранирование специальных символов для регулярного выражения
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
