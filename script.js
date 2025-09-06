@@ -78,76 +78,67 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Обработчик для кнопки "Управление данными"
     document.getElementById('dataManagementBtn').addEventListener('click', function() {
         openLectureModal('управлениеданными');
     });
 
-    // Обработчик для кнопки "Информационные технологии"
     document.getElementById('itBtn').addEventListener('click', function() {
         openLectureModal('информационныетехнологии');
     });
 
-    // Обработчик для кнопки "Вероятность и статистика"
     document.getElementById('probabilityStatisticsBtn').addEventListener('click', function() {
         openLectureModal('вероятностьистатистика');
     });
 
-    // Обработчик для кнопки "Вычислительная математика"
     document.getElementById('computationalMathBtn').addEventListener('click', function() {
         openLectureModal('вычислительнаяматематика');
     });
 
-    // Обработчик для кнопки "Дифференциальные уравнения"
     document.getElementById('differentialEquationsBtn').addEventListener('click', function() {
         openLectureModal('дифференциальныеуравнения');
     });
 
-    // Обработчик для кнопки "Иностранный язык"
     document.getElementById('foreignLanguageBtn').addEventListener('click', function() {
         openLectureModal('иностранныйязык');
     });
 
-    // Обработчик для кнопки "Теория информации"
     document.getElementById('informationTheoryBtn').addEventListener('click', function() {
         openLectureModal('теорияинформации');
     });
 
-    // Обработчик для кнопки "Технологии программирования"
     document.getElementById('programmingTechnologiesBtn').addEventListener('click', function() {
         openLectureModal('технологиипрограммирования');
     });
 
-    // Обработчик для кнопки "УИРИП"
     document.getElementById('uiripBtn').addEventListener('click', function() {
         openLectureModal('уирип');
     });
 
-    // Обработчик для закрытия модального окна
     const modal = document.getElementById('lectureModal');
     const closeBtn = document.getElementById('modalCloseBtn');
     
     closeBtn.addEventListener('click', function() {
         modal.style.display = 'none';
         clearModalSearch();
+        document.body.classList.remove('modal-open');
     });
 
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
             clearModalSearch();
+            document.body.classList.remove('modal-open');
         }
     });
 
-    // Закрытие модального окна по нажатию Escape
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             modal.style.display = 'none';
             clearModalSearch();
+            document.body.classList.remove('modal-open');
         }
     });
 
-    // Инициализация поиска в модальном окне
     initModalSearch();
 });
 
@@ -329,17 +320,14 @@ setInterval(() => {
     }
 }, 60000);
 
-// Функция для открытия модального окна с лекцией
 async function openLectureModal(lectureName) {
     const modal = document.getElementById('lectureModal');
     const content = document.getElementById('lectureContent');
     
-    // Очищаем поиск при открытии нового модального окна
     clearModalSearch();
     document.getElementById('modalSearchInput').value = '';
     
     try {
-        // Загружаем markdown файл
         const response = await fetch(`lectures/${lectureName}.md`);
         if (!response.ok) {
             throw new Error('Файл не найден');
@@ -347,12 +335,11 @@ async function openLectureModal(lectureName) {
         
         const markdownText = await response.text();
         
-        // Преобразуем markdown в HTML
         const htmlContent = markdownToHtml(markdownText);
         
-        // Отображаем содержимое в модальном окне
         content.innerHTML = htmlContent;
         modal.style.display = 'block';
+        document.body.classList.add('modal-open');
         
     } catch (error) {
         console.error('Ошибка загрузки лекции:', error);
@@ -361,36 +348,28 @@ async function openLectureModal(lectureName) {
     }
 }
 
-// Простая функция для преобразования Markdown в HTML
 function markdownToHtml(markdown) {
     let html = markdown;
     
-    // Заголовки
     html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
     html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
     html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
     
-    // Жирный текст
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
-    // Списки
     html = html.replace(/^\s*[\*\-] (.*$)/gim, '<li>$1</li>');
     html = html.replace(/^\s*\d+\. (.*$)/gim, '<li>$1</li>');
     
-    // Обертываем списки в ul
     html = html.replace(/(<li>.*?<\/li>)/gims, function(match) {
-        // Проверяем, не обернут ли уже в список
         if (!match.includes('<ul>') && !match.includes('<ol>')) {
             return '<ul>' + match + '</ul>';
         }
         return match;
     });
     
-    // Параграфы - разделяем по двойным переносам строк
     const paragraphs = html.split(/\n\s*\n/);
     html = paragraphs.map(p => {
         p = p.trim();
-        // Не оборачиваем в <p> если это уже заголовок или список
         if (p.startsWith('<h') || p.startsWith('<ul>') || p.startsWith('<ol>') || p.includes('<li>')) {
             return p;
         }
@@ -400,7 +379,6 @@ function markdownToHtml(markdown) {
     return html;
 }
 
-// Переменные для поиска в модальном окне
 let modalSearchData = {
     originalContent: '',
     currentMatches: [],
@@ -408,7 +386,6 @@ let modalSearchData = {
     isSearchActive: false
 };
 
-// Инициализация поиска в модальном окне
 function initModalSearch() {
     const searchInput = document.getElementById('modalSearchInput');
     const prevBtn = document.getElementById('prevSearchBtn');
@@ -416,7 +393,6 @@ function initModalSearch() {
     const clearBtn = document.getElementById('clearSearchBtn');
     const counter = document.getElementById('searchCounter');
 
-    // Обработчик ввода в поле поиска
     searchInput.addEventListener('input', function() {
         const query = this.value.trim();
         if (query.length > 0) {
@@ -426,7 +402,6 @@ function initModalSearch() {
         }
     });
 
-    // Обработчик для Enter в поле поиска
     searchInput.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -436,11 +411,9 @@ function initModalSearch() {
         }
     });
 
-    // Навигация по результатам
     prevBtn.addEventListener('click', navigateToPrevMatch);
     nextBtn.addEventListener('click', navigateToNextMatch);
 
-    // Очистка поиска
     clearBtn.addEventListener('click', function() {
         searchInput.value = '';
         clearModalSearch();
@@ -448,20 +421,16 @@ function initModalSearch() {
     });
 }
 
-// Выполнение поиска
 function performModalSearch(query) {
     const content = document.getElementById('lectureContent');
     
-    // Сохраняем оригинальный контент при первом поиске
     if (!modalSearchData.isSearchActive) {
         modalSearchData.originalContent = content.innerHTML;
         modalSearchData.isSearchActive = true;
     }
 
-    // Восстанавливаем оригинальный контент
     content.innerHTML = modalSearchData.originalContent;
 
-    // Ищем совпадения (игнорируем регистр)
     const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
     const walker = document.createTreeWalker(
         content,
@@ -481,7 +450,6 @@ function performModalSearch(query) {
     modalSearchData.currentMatches = [];
     modalSearchData.currentIndex = -1;
 
-    // Выделяем найденный текст
     textNodes.forEach(textNode => {
         const parent = textNode.parentNode;
         const text = textNode.textContent;
@@ -494,7 +462,6 @@ function performModalSearch(query) {
             const wrapper = document.createElement('div');
             wrapper.innerHTML = highlightedHTML;
             
-            // Заменяем текстовый узел на выделенный контент
             while (wrapper.firstChild) {
                 parent.insertBefore(wrapper.firstChild, textNode);
             }
@@ -502,13 +469,11 @@ function performModalSearch(query) {
         }
     });
 
-    // Обновляем ссылки на выделенные элементы
     const highlights = content.querySelectorAll('.search-highlight');
     modalSearchData.currentMatches = Array.from(highlights).map(el => ({ element: el }));
 
     updateSearchUI();
 
-    // Переходим к первому результату
     if (modalSearchData.currentMatches.length > 0) {
         modalSearchData.currentIndex = 0;
         highlightCurrentMatch();
@@ -516,7 +481,6 @@ function performModalSearch(query) {
     }
 }
 
-// Очистка поиска
 function clearModalSearch() {
     const content = document.getElementById('lectureContent');
     
@@ -534,11 +498,9 @@ function clearModalSearch() {
     updateSearchUI();
 }
 
-// Навигация к следующему результату
 function navigateToNextMatch() {
     if (modalSearchData.currentMatches.length === 0) return;
 
-    // Убираем выделение с текущего
     if (modalSearchData.currentIndex >= 0) {
         const currentElement = modalSearchData.currentMatches[modalSearchData.currentIndex].element;
         currentElement.classList.remove('current');
@@ -550,11 +512,9 @@ function navigateToNextMatch() {
     updateSearchUI();
 }
 
-// Навигация к предыдущему результату
 function navigateToPrevMatch() {
     if (modalSearchData.currentMatches.length === 0) return;
 
-    // Убираем выделение с текущего
     if (modalSearchData.currentIndex >= 0) {
         const currentElement = modalSearchData.currentMatches[modalSearchData.currentIndex].element;
         currentElement.classList.remove('current');
@@ -569,7 +529,6 @@ function navigateToPrevMatch() {
     updateSearchUI();
 }
 
-// Выделение текущего совпадения
 function highlightCurrentMatch() {
     if (modalSearchData.currentIndex >= 0 && modalSearchData.currentMatches.length > 0) {
         const currentElement = modalSearchData.currentMatches[modalSearchData.currentIndex].element;
@@ -577,7 +536,6 @@ function highlightCurrentMatch() {
     }
 }
 
-// Прокрутка к текущему совпадению
 function scrollToCurrentMatch() {
     if (modalSearchData.currentIndex >= 0 && modalSearchData.currentMatches.length > 0) {
         const currentElement = modalSearchData.currentMatches[modalSearchData.currentIndex].element;
@@ -588,7 +546,6 @@ function scrollToCurrentMatch() {
     }
 }
 
-// Обновление интерфейса поиска
 function updateSearchUI() {
     const counter = document.getElementById('searchCounter');
     const prevBtn = document.getElementById('prevSearchBtn');
@@ -605,7 +562,6 @@ function updateSearchUI() {
     }
 }
 
-// Экранирование специальных символов для регулярного выражения
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
