@@ -33,10 +33,19 @@ function hasLessonsOnDate(date) {
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
+let calendarFilters = {
+    lecture: true,
+    seminar: true,
+    practice: true,
+    lab: true
+};
 
 document.addEventListener('DOMContentLoaded', function() {
     updateCurrentDate();
     loadTodaySchedule();
+    initCalendar();
+    initCalendarControls();
+    initCalendarFilters();
     generateCalendar();
     
     document.getElementById('prevMonth').addEventListener('click', () => {
@@ -46,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
             currentYear--;
         }
         generateCalendar();
+        updateDateSelectors();
     });
     
     document.getElementById('nextMonth').addEventListener('click', () => {
@@ -55,9 +65,18 @@ document.addEventListener('DOMContentLoaded', function() {
             currentYear++;
         }
         generateCalendar();
+        updateDateSelectors();
     });
     
     document.addEventListener('keydown', function(event) {
+        // Проверяем, что модальные окна не открыты
+        const modal = document.getElementById('lectureModal');
+        const dayModal = document.getElementById('dayScheduleModal');
+        const isModalOpen = (modal && modal.style.display === 'block') || 
+                           (dayModal && dayModal.style.display === 'block');
+        
+        if (isModalOpen) return;
+        
         if (event.key === 'ArrowLeft') {
             event.preventDefault();
             currentMonth--;
@@ -66,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentYear--;
             }
             generateCalendar();
+            updateDateSelectors();
         }
         else if (event.key === 'ArrowRight') {
             event.preventDefault();
@@ -75,6 +95,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentYear++;
             }
             generateCalendar();
+            updateDateSelectors();
+        }
+        else if (event.key === 'Home') {
+            event.preventDefault();
+            const today = new Date();
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            generateCalendar();
+            updateDateSelectors();
+        }
+        else if (event.key === 'Escape') {
+            hideTooltip();
+            if (modal && modal.style.display === 'block') {
+                modal.style.display = 'none';
+                clearModalSearch();
+                document.body.classList.remove('modal-open');
+            }
+            if (dayModal && dayModal.style.display === 'block') {
+                dayModal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            }
         }
     });
 
@@ -126,16 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
-            clearModalSearch();
-            document.body.classList.remove('modal-open');
-        }
-    });
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            modal.style.display = 'none';
-            clearModalSearch();
-            document.body.classList.remove('modal-open');
+            clearModalSearch();        document.body.classList.remove('modal-open');
         }
     });
 
@@ -219,6 +251,7 @@ function generateCalendar() {
     const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
     
     document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    updateDateSelectors();
     
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
@@ -228,6 +261,7 @@ function generateCalendar() {
     const calendarGrid = document.getElementById('calendarGrid');
     calendarGrid.innerHTML = '';
     
+    // Создаем заголовки дней недели
     dayNames.forEach(day => {
         const dayElement = document.createElement('div');
         dayElement.className = 'calendar-day header';
@@ -235,6 +269,7 @@ function generateCalendar() {
         calendarGrid.appendChild(dayElement);
     });
     
+    // Дни предыдущего месяца
     for (let i = 0; i < firstDayWeek; i++) {
         const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
         const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
@@ -243,48 +278,97 @@ function generateCalendar() {
         
         const dayElement = document.createElement('div');
         dayElement.className = 'calendar-day other-month';
-        dayElement.textContent = dayNum;
+        
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'calendar-day-number';
+        dayNumber.textContent = dayNum;
+        dayElement.appendChild(dayNumber);
+        
         calendarGrid.appendChild(dayElement);
     }
     
+    // Дни текущего месяца
     for (let day = 1; day <= daysInMonth; day++) {
         const dayElement = document.createElement('div');
         dayElement.className = 'calendar-day';
-        dayElement.textContent = day;
+        
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'calendar-day-number';
+        dayNumber.textContent = day;
+        dayElement.appendChild(dayNumber);
         
         const dayDate = new Date(currentYear, currentMonth, day);
-        const dayOfWeek = dayDate.getDay();
         
+        // Проверяем выходные
+        if (isWeekend(dayDate)) {
+            dayElement.classList.add('weekend');
+        }
+        
+        // Проверяем сегодняшний день
         if (dayDate.toDateString() === currentDate.toDateString()) {
             dayElement.classList.add('today');
         }
         
-        if (hasLessonsOnDate(dayDate)) {
+        // Проверяем наличие занятий
+        const lessons = getScheduleForDate(dayDate);
+        const filteredLessons = getFilteredLessons(lessons);
+        
+        if (filteredLessons.length > 0) {
             dayElement.classList.add('has-classes');
-            const lessonsCount = getScheduleForDate(dayDate).length;
-            dayElement.title = `Занятий: ${lessonsCount}`;
+            dayElement.title = `Занятий: ${filteredLessons.length}`;
+            
+            // Добавляем индикаторы занятий
+            const indicators = createLessonIndicators(lessons);
+            dayElement.appendChild(indicators);
+            
+            // Добавляем обработчики для tooltip
+            let hoverTimeout;
+            
+            dayElement.addEventListener('mouseenter', function() {
+                hoverTimeout = setTimeout(() => {
+                    showTooltip(dayElement, dayDate, lessons);
+                }, 300);
+            });
+            
+            dayElement.addEventListener('mouseleave', function() {
+                clearTimeout(hoverTimeout);
+                hideTooltip();
+            });
         }
         
+        // Обработчик клика
         dayElement.addEventListener('click', () => {
+            hideTooltip();
             showDaySchedule(dayDate);
         });
         
         calendarGrid.appendChild(dayElement);
     }
     
+    // Дни следующего месяца
     const totalCells = calendarGrid.children.length - 7; 
     const remainingCells = 42 - 7 - totalCells; 
     
     for (let day = 1; day <= remainingCells && totalCells < 35; day++) {
         const dayElement = document.createElement('div');
         dayElement.className = 'calendar-day other-month';
-        dayElement.textContent = day;
+        
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'calendar-day-number';
+        dayNumber.textContent = day;
+        dayElement.appendChild(dayNumber);
+        
         calendarGrid.appendChild(dayElement);
     }
+      // Скрываем tooltip при перегенерации календаря
+    hideTooltip();
+    // addCalendarAnimations(); // Отключена анимация переключения месяца
+    addAccessibilitySupport();
 }
 
 function showDaySchedule(date) {
     const daySchedule = getScheduleForDate(date);
+    const filteredSchedule = getFilteredLessons(daySchedule);
     
     const options = { 
         weekday: 'long', 
@@ -294,20 +378,87 @@ function showDaySchedule(date) {
     };
     const dateString = date.toLocaleDateString('ru-RU', options);
     
-    if (daySchedule.length === 0) {
-        alert(`${dateString}\n\nВ этот день занятий нет.`);
+    if (filteredSchedule.length === 0) {
+        // Создаем красивое модальное окно вместо alert
+        showScheduleModal(dateString, []);
         return;
     }
     
-    let scheduleText = `${dateString}\n\nРасписание занятий:\n\n`;
-    daySchedule.forEach(lesson => {
-        scheduleText += `${lesson.time} - ${lesson.subject}\n`;
-        scheduleText += `Преподаватель: ${lesson.teacher}\n`;
-        scheduleText += `Аудитория: ${lesson.room}\n`;
-        scheduleText += `Тип: ${getTypeLabel(lesson.type)}\n\n`;
-    });
+    showScheduleModal(dateString, filteredSchedule);
+}
+
+function showScheduleModal(dateString, schedule) {
+    // Создаем модальное окно для расписания дня
+    let modal = document.getElementById('dayScheduleModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'dayScheduleModal';
+        modal.className = 'modal day-schedule-modal';
+        modal.innerHTML = `
+            <div class="modal-wrapper">
+                <div class="modal-content day-schedule-content">
+                    <div class="day-schedule-header">
+                        <h3 id="dayScheduleDate"></h3>
+                        <button class="modal-close-btn" id="dayScheduleCloseBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="dayScheduleContent"></div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Обработчики закрытия
+        const closeBtn = modal.querySelector('#dayScheduleCloseBtn');
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        });
+        
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            }
+        });
+    }
     
-    alert(scheduleText);
+    const dateElement = modal.querySelector('#dayScheduleDate');
+    const contentElement = modal.querySelector('#dayScheduleContent');
+    
+    dateElement.textContent = dateString;
+    
+    if (schedule.length === 0) {
+        contentElement.innerHTML = `
+            <div class="no-lessons-message">
+                В этот день занятий нет
+            </div>
+        `;
+    } else {
+        contentElement.innerHTML = `
+            <div class="day-schedule-list">
+                ${schedule.map(lesson => `
+                    <div class="day-schedule-item">
+                        <div class="schedule-item-header">
+                            <span class="schedule-time">${lesson.time}</span>
+                            <span class="schedule-type ${lesson.type}">${getTypeLabel(lesson.type)}</span>
+                        </div>
+                        <div class="schedule-subject">${lesson.subject}</div>
+                        <div class="schedule-details">
+                            <div class="schedule-teacher">${lesson.teacher}</div>
+                            <div class="schedule-room">Аудитория ${lesson.room}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    modal.style.display = 'block';
+    document.body.classList.add('modal-open');
 }
 
 setInterval(() => {
@@ -564,5 +715,296 @@ function updateSearchUI() {
 
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function showExportNotification(filename) {
+    // Создаем уведомление об успешном экспорте
+    const notification = document.createElement('div');
+    notification.className = 'export-success';
+    notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Файл "${filename}" скачан</span>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Удаляем уведомление через 3 секунды
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-out forwards';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+function addCalendarAnimations() {
+    // Добавляем плавные переходы при смене месяца
+    const calendarGrid = document.getElementById('calendarGrid');
+    if (calendarGrid) {
+        calendarGrid.classList.add('changing');
+        setTimeout(() => {
+            calendarGrid.classList.remove('changing');
+            calendarGrid.classList.add('entering');
+            setTimeout(() => {
+                calendarGrid.classList.remove('entering');
+            }, 300);
+        }, 150);
+    }
+}
+
+function addAccessibilitySupport() {
+    // Добавляем поддержку клавиатурной навигации
+    const calendarDays = document.querySelectorAll('.calendar-day:not(.header):not(.other-month)');
+    
+    calendarDays.forEach((day, index) => {
+        day.setAttribute('tabindex', '0');
+        day.setAttribute('role', 'button');
+        
+        // Добавляем описание для screen readers
+        const dayNumber = day.querySelector('.calendar-day-number').textContent;
+        const hasClasses = day.classList.contains('has-classes');
+        const isToday = day.classList.contains('today');
+        
+        let ariaLabel = `${dayNumber} число`;
+        if (isToday) ariaLabel += ', сегодня';
+        if (hasClasses) ariaLabel += ', есть занятия';
+        
+        day.setAttribute('aria-label', ariaLabel);
+        
+        // Обработка Enter и Space
+        day.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                day.click();
+            }
+        });
+    });
+}
+
+function exportCalendar() {
+    const year = currentYear;
+    const month = currentMonth;
+    
+    // Собираем все данные за месяц
+    const monthData = [];
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const lessons = getScheduleForDate(date);
+        const filteredLessons = getFilteredLessons(lessons);
+        
+        if (filteredLessons.length > 0) {
+            monthData.push({
+                date: date.toLocaleDateString('ru-RU'),
+                lessons: filteredLessons
+            });
+        }
+    }
+    
+    // Создаем CSV контент
+    const monthNames = [
+        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ];
+    
+    const filename = `schedule_${monthNames[month]}_${year}.csv`;
+    let csvContent = `Расписание за ${monthNames[month]} ${year}\n\n`;
+    csvContent += "Дата,Время,Предмет,Преподаватель,Аудитория,Тип\n";
+    
+    monthData.forEach(dayData => {
+        dayData.lessons.forEach(lesson => {
+            csvContent += `"${dayData.date}","${lesson.time}","${lesson.subject}","${lesson.teacher}","${lesson.room}","${getTypeLabel(lesson.type)}"\n`;
+        });
+    });
+    
+    // Скачиваем файл
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Показываем уведомление об успешном экспорте
+    showExportNotification(filename);
+}
+
+function initCalendar() {
+    const currentYear = new Date().getFullYear();
+    const yearSelector = document.getElementById('yearSelector');
+    
+    // Заполняем выбор года (от текущего года - 2 до текущего года + 5)
+    for (let year = currentYear - 2; year <= currentYear + 5; year++) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        if (year === currentYear) {
+            option.selected = true;
+        }
+        yearSelector.appendChild(option);
+    }
+}
+
+function initCalendarControls() {
+    const monthSelector = document.getElementById('monthSelector');
+    const yearSelector = document.getElementById('yearSelector');
+    const todayBtn = document.getElementById('todayBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    
+    monthSelector.value = currentMonth;
+    yearSelector.value = currentYear;
+    
+    monthSelector.addEventListener('change', function() {
+        currentMonth = parseInt(this.value);
+        generateCalendar();
+    });
+    
+    yearSelector.addEventListener('change', function() {
+        currentYear = parseInt(this.value);
+        generateCalendar();
+    });
+    
+    todayBtn.addEventListener('click', function() {
+        const today = new Date();
+        currentMonth = today.getMonth();
+        currentYear = today.getFullYear();
+        updateDateSelectors();
+        generateCalendar();
+    });
+    
+    exportBtn.addEventListener('click', function() {
+        exportCalendar();
+    });
+}
+
+function updateDateSelectors() {
+    document.getElementById('monthSelector').value = currentMonth;
+    document.getElementById('yearSelector').value = currentYear;
+}
+
+function initCalendarFilters() {
+    const filterInputs = {
+        lecture: document.getElementById('filterLecture'),
+        seminar: document.getElementById('filterSeminar'),
+        practice: document.getElementById('filterPractice'),
+        lab: document.getElementById('filterLab')
+    };
+    
+    Object.keys(filterInputs).forEach(type => {
+        filterInputs[type].addEventListener('change', function() {
+            calendarFilters[type] = this.checked;
+            generateCalendar();
+        });
+    });
+}
+
+function getFilteredLessons(lessons) {
+    return lessons.filter(lesson => calendarFilters[lesson.type]);
+}
+
+function createLessonIndicators(lessons) {
+    const filteredLessons = getFilteredLessons(lessons);
+    const indicators = document.createElement('div');
+    indicators.className = 'calendar-day-indicators';
+    
+    const typeCount = {};
+    filteredLessons.forEach(lesson => {
+        typeCount[lesson.type] = (typeCount[lesson.type] || 0) + 1;
+    });
+    
+    Object.keys(typeCount).forEach(type => {
+        for (let i = 0; i < Math.min(typeCount[type], 4); i++) {
+            const indicator = document.createElement('div');
+            indicator.className = `lesson-indicator ${type}`;
+            indicators.appendChild(indicator);
+        }
+    });
+    
+    return indicators;
+}
+
+function isWeekend(date) {
+    const day = date.getDay();
+    return day === 0 || day === 6; // Воскресенье или суббота
+}
+
+function createCalendarTooltip() {
+    let tooltip = document.getElementById('calendarTooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'calendarTooltip';
+        tooltip.className = 'calendar-tooltip';
+        document.body.appendChild(tooltip);
+    }
+    return tooltip;
+}
+
+function showTooltip(dayElement, date, lessons) {
+    const tooltip = createCalendarTooltip();
+    const filteredLessons = getFilteredLessons(lessons);
+    
+    if (filteredLessons.length === 0) return;
+    
+    const options = { 
+        weekday: 'long', 
+        day: 'numeric',
+        month: 'long'
+    };
+    const dateString = date.toLocaleDateString('ru-RU', options);
+    
+    tooltip.innerHTML = `
+        <div class="tooltip-header">
+            <span class="tooltip-date">${dateString}</span>
+            <span class="tooltip-count">${filteredLessons.length} занятий</span>
+        </div>
+        <div class="tooltip-content">
+            ${filteredLessons.map(lesson => `
+                <div class="tooltip-lesson">
+                    <div class="tooltip-lesson-indicator ${lesson.type}"></div>
+                    <div class="tooltip-lesson-text">
+                        <div class="tooltip-lesson-time">${lesson.time}</div>
+                        <div class="tooltip-lesson-subject">${lesson.subject}</div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    // Позиционирование tooltip
+    const rect = dayElement.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+    let top = rect.top - tooltipRect.height - 10;
+    
+    // Проверяем границы экрана
+    if (left < 10) left = 10;
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+    }
+    if (top < 10) {
+        top = rect.bottom + 10;
+    }
+    
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+    tooltip.classList.add('visible');
+}
+
+function hideTooltip() {
+    const tooltip = document.getElementById('calendarTooltip');
+    if (tooltip) {
+        tooltip.classList.remove('visible');
+    }
 }
 

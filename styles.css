@@ -342,59 +342,442 @@ section h2 {
     border: 1px solid rgba(168, 85, 247, 0.3);
 }
 
-.calendar-container {
-    max-width: 100%;
-}
-
-.calendar-header {
+/* Новые стили для улучшенного календаря */
+.calendar-header-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
-    padding: 0 12px;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
-.calendar-header h3 {
+.calendar-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.date-selector {
+    display: flex;
+    gap: 8px;
+}
+
+.date-select {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.7) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.date-select:focus, .date-select:hover {
+    border-color: rgba(139, 92, 246, 0.6);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    background: linear-gradient(135deg, rgba(51, 65, 85, 1) 0%, rgba(71, 85, 105, 0.8) 100%);
+}
+
+.date-select option {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+.calendar-view-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.today-btn, .export-btn {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.today-btn:hover, .export-btn:hover {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+    border-color: rgba(139, 92, 246, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+}
+
+.calendar-filters {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(51, 65, 85, 0.4) 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    color: #cbd5e1;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #e2e8f0;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.filter-checkbox input {
+    display: none;
+}
+
+.checkmark {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.checkmark.lecture {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.checkmark.seminar {
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+}
+
+.checkmark.practice {
+    background: linear-gradient(135deg, #a855f7 0%, #7c2d12 100%);
+}
+
+.checkmark.lab {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.filter-checkbox input:checked + .checkmark::after {
+    content: '✓';
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.filter-checkbox:hover {
+    transform: translateY(-1px);
+}
+
+.calendar-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 8px;
+}
+
+.calendar-navigation h3 {
     color: #f8fafc;
-    font-size: 1.8em;
+    font-size: 1.6em;
     font-weight: 700;
     background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin: 0;
+    text-align: center;
+    flex: 1;
 }
+
+.calendar-legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(51, 65, 85, 0.2) 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #cbd5e1;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.legend-color.today {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.legend-color.has-classes {
+    background: linear-gradient(135deg, #4692DD, #357abd);
+}
+
+.legend-color.weekend {
+    background: linear-gradient(135deg, rgba(100, 116, 139, 0.8) 0%, rgba(71, 85, 105, 0.6) 100%);
+}
+
+/* Обновленные стили для дней календаря */
+.calendar-day {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.7) 100%);
+    color: #e1e7f3;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 2px solid rgba(59, 130, 246, 0.1);
+    overflow: hidden;
+}
+
+.calendar-day-number {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.calendar-day-indicators {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    justify-content: center;
+    max-width: 100%;
+}
+
+.lesson-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+.lesson-indicator.lecture {
+    background: #3b82f6;
+}
+
+.lesson-indicator.seminar {
+    background: #10b981;
+}
+
+.lesson-indicator.practice {
+    background: #a855f7;
+}
+
+.lesson-indicator.lab {
+    background: #f59e0b;
+}
+
+.calendar-day.weekend {
+    background: linear-gradient(135deg, rgba(100, 116, 139, 0.6) 0%, rgba(71, 85, 105, 0.4) 100%);
+    color: #94a3b8;
+}
+
+.calendar-day.weekend .calendar-day-number {
+    color: #f87171;
+}
+
+/* Tooltip стили */
+.calendar-tooltip {
+    position: absolute;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 12px;
+    padding: 12px;
+    color: #e2e8f0;
+    font-size: 14px;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.9) translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    max-width: 300px;
+    min-width: 200px;
+}
+
+.calendar-tooltip.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.tooltip-date {
+    font-weight: 700;
+    color: #8b5cf6;
+}
+
+.tooltip-count {
+    font-size: 12px;
+    color: #94a3b8;
+    background: rgba(139, 92, 246, 0.2);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.tooltip-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.tooltip-lesson {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.tooltip-lesson-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.tooltip-lesson-text {
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+.tooltip-lesson-time {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.tooltip-lesson-subject {
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+/* Анимации */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Анимации отключены
+.calendar-grid {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.calendar-day {
+    animation: slideIn 0.3s ease-out backwards;
+}
+
+.calendar-day:nth-child(1) { animation-delay: 0.05s; }
+.calendar-day:nth-child(2) { animation-delay: 0.1s; }
+.calendar-day:nth-child(3) { animation-delay: 0.15s; }
+.calendar-day:nth-child(4) { animation-delay: 0.2s; }
+.calendar-day:nth-child(5) { animation-delay: 0.25s; }
+.calendar-day:nth-child(6) { animation-delay: 0.3s; }
+.calendar-day:nth-child(7) { animation-delay: 0.35s; }
+*/
 
 .nav-btn {
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     border: none;
     color: white;
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1.3em;
+    font-size: 1.2em;
     font-weight: bold;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-btn:hover {
-    transform: scale(1.15);
+    transform: scale(1.1);
     box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4);
     background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+}
+
+.nav-btn:active {
+    transform: scale(0.95);
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
+    gap: 3px;
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(59, 130, 246, 0.15);
-    padding: 2px;
+    padding: 3px;
 }
 
 .calendar-day {
@@ -411,12 +794,12 @@ section h2 {
     position: relative;
     border-radius: 12px;
     font-weight: 600;
-    border: 1px solid rgba(59, 130, 246, 0.1);
+    border: 2px solid rgba(59, 130, 246, 0.1);
 }
 
 .calendar-day:hover {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.6) 100%);
-    transform: scale(1.05);
+    transform: scale(1.03);
     color: #ffffff;
     box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
 }
@@ -426,9 +809,11 @@ section h2 {
     color: #f8fafc;
     font-weight: 700;
     cursor: default;
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    border: 2px solid rgba(59, 130, 246, 0.2);
     font-size: 0.95em;
     letter-spacing: 0.5px;
+    min-height: 50px;
+    padding: 8px;
 }
 
 .calendar-day.header:hover {
@@ -449,13 +834,19 @@ section h2 {
     font-weight: 800;
     box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
     border: 2px solid rgba(255, 255, 255, 0.3);
+    animation: pulse-today 2s infinite;
+}
+
+@keyframes pulse-today {
+    0%, 100% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); }
+    50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.8), 0 0 20px rgba(239, 68, 68, 0.4); }
 }
 
 .calendar-day.has-classes {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, #4692DD, #357abd);
     color: white;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(70, 146, 221, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .calendar-day.has-classes::after {
@@ -465,9 +856,9 @@ section h2 {
     left: 50%;
     transform: translateX(-50%);
     width: 8px;
-    height: 8px;
+    height: 2px;
     background: linear-gradient(45deg, #ffffff, #f0f9ff);
-    border-radius: 50%;
+    border-radius: 2px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -535,13 +926,52 @@ section h2 {
     }
     
     .calendar-day {
-        padding: 12px 4px;
+        padding: 8px 4px;
         font-size: 0.9em;
-        min-height: 50px;
+        min-height: 60px;
+    }
+    
+    .calendar-day-number {
+        font-size: 14px;
+    }
+    
+    .lesson-indicator {
+        width: 4px;
+        height: 4px;
     }
     
     section {
         padding: 20px;
+    }
+    
+    .calendar-header-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .calendar-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .filter-group {
+        gap: 12px;
+    }
+    
+    .calendar-legend {
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    
+    .legend-item {
+        font-size: 12px;
+    }
+    
+    .nav-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1em;
     }
 }
 
@@ -581,15 +1011,50 @@ section h2 {
     }
     
     .calendar-day {
-        padding: 10px 2px;
+        padding: 6px 2px;
         font-size: 0.85em;
-        min-height: 45px;
+        min-height: 50px;
+    }
+    
+    .calendar-day-number {
+        font-size: 12px;
+    }
+    
+    .lesson-indicator {
+        width: 3px;
+        height: 3px;
     }
     
     .nav-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.1em;
+        width: 32px;
+        height: 32px;
+        font-size: 0.9em;
+    }
+    
+    .date-select {
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+    
+    .today-btn, .export-btn {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .calendar-legend {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .calendar-tooltip {
+        max-width: 250px;
+        font-size: 12px;
     }
 }
 
@@ -919,7 +1384,6 @@ footer a:hover::before {
     border-color: rgba(139, 92, 246, 0.4);
 }
 
-/* Стили для выделения найденного текста */
 .search-highlight {
     background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 100%);
     color: #000000;
@@ -1059,4 +1523,221 @@ footer a:hover::before {
 
 body.modal-open {
     overflow: hidden;
+}
+
+.calendar-container {
+    max-width: 100%;
+    position: relative;
+}
+
+/* Стили для модального окна расписания дня */
+.day-schedule-modal .modal-content {
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+}
+
+.day-schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+.day-schedule-header h3 {
+    color: #8b5cf6;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 0;
+}
+
+.day-schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.day-schedule-item {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.7) 100%);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.day-schedule-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #6366f1, #8b5cf6, #ec4899);
+}
+
+.day-schedule-item:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Дополнительные улучшения календаря */
+.calendar-container {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Отключена анимация переключения месяца
+.calendar-grid.changing {
+    animation: slideOut 0.3s ease-out forwards;
+}
+
+.calendar-grid.entering {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+*/
+
+/* Улучшения для touch устройств */
+@media (pointer: coarse) {
+    .calendar-day {
+        min-height: 80px;
+        padding: 16px 8px;
+    }
+    
+    .nav-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4em;
+    }
+    
+    .filter-checkbox {
+        padding: 8px;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+    }
+    
+    .filter-checkbox:active {
+        background-color: rgba(139, 92, 246, 0.1);
+    }
+    
+    .today-btn, .export-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+}
+
+/* Индикаторы загрузки */
+.calendar-loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.calendar-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    border: 3px solid rgba(139, 92, 246, 0.3);
+    border-top: 3px solid #8b5cf6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Улучшения для экспорта */
+.export-success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    z-index: 1000;
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Accessibility улучшения */
+.nav-btn:focus-visible,
+.today-btn:focus-visible,
+.export-btn:focus-visible,
+.filter-checkbox:focus-within {
+    outline: 2px solid #8b5cf6;
+    outline-offset: 2px;
+}
+
+.calendar-day:focus-visible {
+    outline: 2px solid #8b5cf6;
+    outline-offset: -2px;
+}
+
+/* Скрытие элементов для screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

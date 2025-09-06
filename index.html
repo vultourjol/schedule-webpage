@@ -43,18 +43,99 @@
                     <div class="schedule-list" id="scheduleList">
                     </div>
                 </div>
-            </section>
+            </section>            <section class="calendar-section">
+                <div class="calendar-header-wrapper">
+                    <h2>Календарь</h2>
+                    <div class="calendar-controls">
+                        <div class="date-selector">
+                            <select id="monthSelector" class="date-select">
+                                <option value="0">Январь</option>
+                                <option value="1">Февраль</option>
+                                <option value="2">Март</option>
+                                <option value="3">Апрель</option>
+                                <option value="4">Май</option>
+                                <option value="5">Июнь</option>
+                                <option value="6">Июль</option>
+                                <option value="7">Август</option>
+                                <option value="8">Сентябрь</option>
+                                <option value="9">Октябрь</option>
+                                <option value="10">Ноябрь</option>
+                                <option value="11">Декабрь</option>
+                            </select>
+                            <select id="yearSelector" class="date-select"></select>
+                        </div>
+                        <div class="calendar-view-controls">
+                            <button id="todayBtn" class="today-btn">Сегодня</button>
+                            <button id="exportBtn" class="export-btn">Экспорт</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="calendar-filters">
+                    <div class="filter-group">
+                        <span class="filter-label">Показать:</span>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="filterLecture" checked>
+                            <span class="checkmark lecture"></span>
+                            Лекции
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="filterSeminar" checked>
+                            <span class="checkmark seminar"></span>
+                            Семинары
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="filterPractice" checked>
+                            <span class="checkmark practice"></span>
+                            Практики
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="filterLab" checked>
+                            <span class="checkmark lab"></span>
+                            Лабораторные
+                        </label>
+                    </div>
+                </div>
 
-            <section class="calendar-section">
-                <h2>Календарь</h2>
                 <div class="calendar-container">
-                    <div class="calendar-header">
-                        <button id="prevMonth" class="nav-btn">&lt;</button>
+                    <div class="calendar-navigation">
+                        <button id="prevMonth" class="nav-btn" title="Предыдущий месяц">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                         <h3 id="currentMonth"></h3>
-                        <button id="nextMonth" class="nav-btn">&gt;</button>
+                        <button id="nextMonth" class="nav-btn" title="Следующий месяц">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="calendar-grid" id="calendarGrid">
                     </div>
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-color today"></div>
+                            <span>Сегодня</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color has-classes"></div>
+                            <span>Есть занятия</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color weekend"></div>
+                            <span>Выходные</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tooltip для предварительного просмотра -->
+                <div id="calendarTooltip" class="calendar-tooltip">
+                    <div class="tooltip-header">
+                        <span class="tooltip-date"></span>
+                        <span class="tooltip-count"></span>
+                    </div>
+                    <div class="tooltip-content"></div>
                 </div>
             </section>
 
@@ -79,7 +160,6 @@
         </main>
     </div>
 
-    <!-- Модальное окно для лекций -->
     <div id="lectureModal" class="modal">
         <div class="modal-search-container">
             <input type="text" id="modalSearchInput" placeholder="Поиск по содержимому лекции..." class="modal-search-input">
