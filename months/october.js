@@ -253,3 +253,5 @@ const october2025 = {
         },
     ],
 };
+
+window.octoberSchedule = octoberSchedule;
