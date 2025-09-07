@@ -189,3 +189,5 @@ const october2025 = {
         }
     ],
 };
+
+window.novemberSchedule = novemberSchedule;
