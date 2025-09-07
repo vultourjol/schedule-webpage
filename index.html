@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>РОСНОУ Расписание</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Расписание" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+</head>
+<body>
+    <header>
+        <div class="current-date" id="currentDate"></div>
+    </header>
+
+    <main>
+        <section class="today-schedule">
+            <h2>Сегодня</h2>
+            <div class="schedule-container" id="todaySchedule">
+                <!-- Расписание на сегодня будет загружено здесь -->
+            </div>
+        </section>
+
+        <section class="tomorrow-schedule">
+            <h2>Завтра</h2>
+            <div class="schedule-container" id="tomorrowSchedule">
+                <!-- Расписание на завтра будет загружено здесь -->
+            </div>
+        </section>
+
+        <section class="calendar-section">
+            <!-- <h2>Календарь</h2> -->
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button id="prevMonth" class="nav-btn">&lt;</button>
+                    <h3 id="monthYear"></h3>
+                    <button id="nextMonth" class="nav-btn">&gt;</button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Календарь будет сгенерирован здесь -->
+                </div>
+            </div>
+            
+            <!-- Кнопки экспорта -->
+            <div class="export-section">
+                <h3>Экспорт в календарь</h3>
+                <div class="export-buttons">
+                    <button id="exportICS" class="export-btn">
+                        <i class="ri-download-2-line"></i>
+                        Скачать расписание (ICS)
+                    </button>
+                </div>
+                <div class="export-options">
+                    <label>
+                        <input type="checkbox" id="exportCurrentMonth" checked>
+                        Только текущий месяц
+                    </label>
+                    <label>
+                        <input type="checkbox" id="exportAllSchedule">
+                        Весь семестр
+                    </label>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p><a href="https://vultourjol.ru">created by vultourjol <i class="ri-code-box-fill"></i></a></p>
+    </footer>
+
+    <script src="months/september.js"></script>
+    <script src="js/schedule-manager.js"></script>
+    <script src="js/calendar-export.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
